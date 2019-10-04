@@ -29,7 +29,7 @@ public class Geral {
                     System.out.println("  - Ações");
                     System.out.println(("  - Sair"));
                     acaoMenu = ler.nextInt();
-                    //if(acaoMenu>=2)this.gerenciamento(acaoMenu);
+                    if(acaoMenu>=2) gerenciamento(acaoMenu);
 
                 case 2:
                     System.out.println("Escolha a ação desejada: ");
@@ -80,7 +80,7 @@ public class Geral {
 
 
 
-    public void gerenciamento(int a){
+    public static void gerenciamento(int a){
         Scanner ler = new Scanner(System.in);
         if(a==1){
             System.out.println("\tMenu de Gerenciamento de Livros");
@@ -96,6 +96,7 @@ public class Geral {
                     break;
                 case 2: break;
                 case 3: break;
+                default: break;
             }
 
 
@@ -116,7 +117,7 @@ public class Geral {
 
     }//end_gerenciamento
 
-    public void busca(int a){
+    public static void busca(int a){
 
     }
 
