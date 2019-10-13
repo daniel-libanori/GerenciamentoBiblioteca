@@ -1,4 +1,4 @@
-package com.operacoes;
+package com.gerenciamento;
 
 import com.banco_de_dados.ConexaoSQLite;
 import com.principal.Livro;
@@ -6,7 +6,6 @@ import com.principal.Usuario;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
 public class Inserir {
 

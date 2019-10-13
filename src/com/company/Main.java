@@ -3,8 +3,9 @@ package com.company;
 
 import com.banco_de_dados.ConexaoSQLite;
 import com.banco_de_dados.CriarTabelas;
-import com.operacoes.Inserir;
-import com.principal.Usuario;
+import com.buscas.Listagem;
+import com.gerenciamento.Alterar;
+import com.gerenciamento.Inserir;
 
 import java.sql.*;
 
@@ -19,8 +20,8 @@ public class Main {
 
 
         //Inserir.inserirUsuario(conexaoSQlite);
-        Inserir.inserirLivro(conexaoSQlite);
-
-
+        //Inserir.inserirLivro(conexaoSQlite);
+        //Listagem.usuario_listarTodos(conexaoSQlite);
+        Alterar.alterarUsuario(conexaoSQlite);
     }
 }
