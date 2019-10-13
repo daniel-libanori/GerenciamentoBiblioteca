@@ -74,7 +74,7 @@ public class CriarTabelas {
         String sql = "CREATE TABLE IF NOT EXISTS  exemplares ("
                 + "exemplar_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,"
                 + "ISBN        INTEGER REFERENCES livros (ISBN)  NOT NULL,"
-                + "disponivel  INTEGER"
+                + "disponivel  BOOLEAN"
                 + ");";
 
         boolean conectou = false;

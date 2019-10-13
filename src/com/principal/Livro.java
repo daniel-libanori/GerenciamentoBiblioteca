@@ -1,6 +1,7 @@
 package com.principal;
 
 import com.auxiliar.Auxilio;
+import com.banco_de_dados.ConexaoSQLite;
 
 import java.util.Scanner;
 
@@ -78,4 +79,10 @@ public class Livro {
     public boolean isReservado() {
         return reservado;
     }
+
+
+
+
+
+
 }

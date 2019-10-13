@@ -1,11 +1,16 @@
 package com.gerenciamento;
 
+import com.auxiliar.Auxilio;
 import com.banco_de_dados.ConexaoSQLite;
+import com.principal.Exemplar;
 import com.principal.Livro;
 import com.principal.Usuario;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
 
 public class Inserir {
 
@@ -44,7 +49,9 @@ public class Inserir {
         conexaoSQLite.conectar();
 
         try{
+
             PreparedStatement p = conexaoSQLite.getConexao().prepareStatement(sql);
+
 
 
             p.setInt(1,l.getISBN());
@@ -60,11 +67,64 @@ public class Inserir {
 
             p.execute();
 
+
+
+
             conexaoSQLite.desconectar();
         }catch(SQLException e){
             System.out.println("Erro");
         }
 
+
+    }
+
+
+
+    public static void inserirExemplar(ConexaoSQLite conexaoSQLite){
+
+        Scanner sc = new Scanner(System.in);
+
+        String temp = "";
+
+        Exemplar exe = new Exemplar();
+
+        if(!Auxilio.verificaSeLivroExiste(conexaoSQLite,exe.getISBN(),true)) return;
+
+
+
+        conexaoSQLite.conectar();
+        String sql = "INSERT INTO exemplares(ISBN,disponivel) VALUES (?,?);";
+
+
+        try{
+
+            PreparedStatement p = conexaoSQLite.getConexao().prepareStatement(sql);
+
+            p.setInt(1,exe.getISBN());
+            p.setBoolean(2,exe.isDisponivel());
+            p.execute();
+
+            conexaoSQLite.desconectar();
+        }catch(SQLException e){
+            System.out.println("Erro");
+        }
+
+
+        conexaoSQLite.desconectar();
+        conexaoSQLite.conectar();
+
+
+        String sql1 = "update livros set exemplares = exemplares + 1, disponiveis = disponiveis + 1 where ISBN = " +  exe.getISBN().toString();
+        try {
+
+            PreparedStatement p = conexaoSQLite.getConexao().prepareStatement(sql1);
+            p.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        conexaoSQLite.desconectar();
 
     }
 
