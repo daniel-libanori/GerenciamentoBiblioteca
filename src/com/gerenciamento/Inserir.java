@@ -88,7 +88,7 @@ public class Inserir {
 
         Exemplar exe = new Exemplar();
 
-        if(!Auxilio.verificaSeLivroExiste(conexaoSQLite,exe.getISBN(),true)) return;
+        if(!Auxilio.verificaSeLivroExiste(conexaoSQLite,exe.getISBN())) return;
 
 
 

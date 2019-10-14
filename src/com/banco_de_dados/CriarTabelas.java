@@ -94,14 +94,21 @@ public class CriarTabelas {
 
     }
     private void criarTabelaEmprestimos(){
-        String sql = "CREATE TABLE IF NOT EXISTS  emprestimos (\n" +
-                "    emprestimo_id   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "    dataEmprestimo  DATE    NOT NULL," +
-                "    dataDevolucao   DATE    NOT NULL," +
+        String sql = "CREATE TABLE IF NOT EXISTS  emprestimos (" +
+                "    emprestimo_id   INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "                            NOT NULL," +
                 "    devolvido       BOOLEAN NOT NULL," +
                 "    possivelRenovar BOOLEAN NOT NULL," +
                 "    exemplar_id     INTEGER REFERENCES exemplares," +
-                "    user_id         INTEGER REFERENCES usuarios (user_id)" +
+                "    user_id         INTEGER REFERENCES usuarios (user_id)," +
+                "    diaEmprestimo   INTEGER NOT NULL," +
+                "    mesEmprestimo   INTEGER NOT NULL," +
+                "    anoEmprestimo   INTEGER NOT NULL," +
+                "    diaDevolucao    INTEGER NOT NULL," +
+                "    mesDevolucao    INTEGER NOT NULL," +
+                "    anoDevolucao    INTEGER NOT NULL," +
+                "    ISBN            INTEGER NOT NULL" +
+                "                            REFERENCES livros (ISBN)" +
                 ");";
 
         boolean conectou = false;
