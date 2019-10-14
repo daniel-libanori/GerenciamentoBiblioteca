@@ -21,12 +21,19 @@ public class Emprestar {
         String temp = "";
 
         Emprestimo emp = new Emprestimo(conexaoSQLite);
+        emp.setNomeLivro(Auxilio.retornaNomeLivro_ISBN(conexaoSQLite, emp.getISBN()));
+
+        if(Auxilio.verificaSeTemMulta(conexaoSQLite, emp.getUser_id()) && Auxilio.verificaEmprestimosAtuais(conexaoSQLite, emp.getUser_id())>0)
+            System.out.println("Voce deve pagar suas multas para reservar mais que um livro.");
+
+
+        if(!Auxilio.verificaSeLivroEstaDisponivel(conexaoSQLite,emp.getISBN())) return;
 
         separarExemplarETrocarDisponibilidade(conexaoSQLite,emp.getISBN(),emp);
 
 
         conexaoSQLite.conectar();
-        String sql = "INSERT INTO emprestimos(devolvido,possivelRenovar,exemplar_id,user_id,diaEmprestimo,mesEmprestimo,anoEmprestimo,diaDevolucao,mesDevolucao,anoDevolucao, ISBN) VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO emprestimos(devolvido,possivelRenovar,exemplar_id,user_id,diaEmprestimo,mesEmprestimo,anoEmprestimo,diaDevolucao,mesDevolucao,anoDevolucao, ISBN, nomeLivro) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);";
 
 
         try{
@@ -44,6 +51,7 @@ public class Emprestar {
             p.setInt(9,emp.getMesDevolucao());
             p.setInt(10,emp.getAnoDevolucao());
             p.setInt(11,emp.getISBN());
+            p.setString(12,emp.getNomeLivro());
             p.execute();
 
             conexaoSQLite.desconectar();
@@ -234,7 +242,7 @@ public class Emprestar {
     public static void devolverLivro(ConexaoSQLite conexaoSQLite){
 
         Scanner sc = new Scanner(System.in);
-        int emprestimo_id = 0, exemplar_id=0;
+        Integer emprestimo_id = 0, exemplar_id=0, ISBN=0;
         int dia,mes,ano;
         String temp = "";
 
@@ -247,7 +255,7 @@ public class Emprestar {
 
         emprestimoDevolvido(conexaoSQLite,emprestimo_id);
         exemplar_id = exemplarDevolvido(conexaoSQLite,emprestimo_id);
-        livroDevolvido(conexaoSQLite, exemplar_id);
+        ISBN = livroDevolvido(conexaoSQLite, exemplar_id);
 
         System.out.print("Digite o dia da devolução: ");
         dia = sc.nextInt(); sc.nextLine();
@@ -259,8 +267,48 @@ public class Emprestar {
 
 
         //Voltar Emprestimos atuais do Usuario
-
         usuarioAtualizaDevolucao(conexaoSQLite, emprestimo_id,dia,mes,ano);
+
+        //Se livro estava reservado desfazer as condiçoes de reserva
+
+        if(Auxilio.verificaSeLivroEstaDisponivel(conexaoSQLite,ISBN)) return;
+
+        else{
+
+            //possivelrenovar=1 (emprestimos)
+            String sql = "UPDATE emprestimos SET possivelRenovar = true WHERE ISBN = " + ISBN.toString();
+
+            conexaoSQLite.conectar();
+
+            try {
+                PreparedStatement ps = conexaoSQLite.getConexao().prepareStatement(sql);
+                ps.execute();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            conexaoSQLite.desconectar();
+
+
+            //reservado=0 (livros)
+            sql = "UPDATE livros SET reservado = false WHERE ISBN = " + ISBN.toString();
+
+            conexaoSQLite.conectar();
+
+            try {
+                PreparedStatement ps = conexaoSQLite.getConexao().prepareStatement(sql);
+                ps.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            conexaoSQLite.desconectar();
+
+
+        }
+
+
 
 
     }
@@ -326,7 +374,7 @@ public class Emprestar {
 
     }
 
-    private static void livroDevolvido(ConexaoSQLite conexaoSQLite, Integer exemplar_id){
+    private static Integer livroDevolvido(ConexaoSQLite conexaoSQLite, Integer exemplar_id){
 
         Integer ISBN = 0;
 
@@ -361,7 +409,7 @@ public class Emprestar {
         conexaoSQLite.desconectar();
 
 
-
+        return  ISBN;
 
 
     }
@@ -424,6 +472,7 @@ public class Emprestar {
         return multa;
 
     }
+
 
 
 

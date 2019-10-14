@@ -10,25 +10,12 @@ import java.util.Scanner;
 
 public class Auxilio {
 
-    public final static void LimpaTela()
-    {
-        try
-        {
-            final String os = System.getProperty("os.name");
+    public final static void LimpaTela(){
 
-            if (os.contains("Windows"))
-            {
-                Runtime.getRuntime().exec("cls");
-            }
-            else
-            {
-                Runtime.getRuntime().exec("clear");
-            }
+        for(int i=0;i<150;i++){
+            System.out.println("\n");
         }
-        catch (final Exception e)
-        {
-            //  Handle any exceptions.
-        }
+
     }
 
     public static boolean verificaSeLivroExiste(ConexaoSQLite conexaoSQLite, int ISBN){
@@ -202,7 +189,92 @@ public class Auxilio {
         return -1;
     }
 
+    public static Boolean verificaSeTemMulta(ConexaoSQLite conexaoSQLite, Integer user_id){
 
+        String sql1 = "SELECT * FROM usuarios WHERE user_id = " + user_id.toString();
+
+        conexaoSQLite.conectar();
+
+        try {
+            Statement stmt = conexaoSQLite.getConexao().createStatement();
+            ResultSet rs = stmt.executeQuery(sql1);
+
+            if(rs.getInt("multa")!=0){
+                conexaoSQLite.desconectar();
+                return true;
+            }else {
+                conexaoSQLite.desconectar();
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        conexaoSQLite.desconectar();
+        return false;
+
+
+
+
+
+    }
+
+    public static Integer verificaEmprestimosAtuais(ConexaoSQLite conexaoSQLite, Integer user_id){
+
+        String sql1 = "SELECT * FROM usuarios WHERE user_id = " + user_id.toString();
+        int emprestimosAtuais = 0;
+
+
+        conexaoSQLite.conectar();
+
+        try {
+            Statement stmt = conexaoSQLite.getConexao().createStatement();
+            ResultSet rs = stmt.executeQuery(sql1);
+
+            emprestimosAtuais = rs.getInt("emprestimosAtuais");
+            conexaoSQLite.desconectar();
+            return emprestimosAtuais;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        conexaoSQLite.desconectar();
+        return emprestimosAtuais;
+
+
+
+
+
+    }
+
+    public static String retornaNomeLivro_ISBN(ConexaoSQLite conexaoSQLite, Integer ISBN){
+
+        String sql1 = "SELECT * FROM livros WHERE ISBN = " + ISBN.toString();
+        String nomeLivro = "";
+
+
+        conexaoSQLite.conectar();
+
+        try {
+            Statement stmt = conexaoSQLite.getConexao().createStatement();
+            ResultSet rs = stmt.executeQuery(sql1);
+
+            nomeLivro = rs.getString("nome");
+            conexaoSQLite.desconectar();
+            return nomeLivro;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        conexaoSQLite.desconectar();
+        return nomeLivro;
+
+    }
 
 
 }

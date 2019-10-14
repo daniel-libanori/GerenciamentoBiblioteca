@@ -17,8 +17,11 @@ public class CriarTabelas {
         criarTabelaUsuarios();
         criarTabelaLivros();
         criarTabelaExemplares();
+
+
         criarTabelaEmprestimos();
-        criarTabelaRevervas();
+
+        criarTabelaReservas();
     }
 
 
@@ -108,7 +111,8 @@ public class CriarTabelas {
                 "    mesDevolucao    INTEGER NOT NULL," +
                 "    anoDevolucao    INTEGER NOT NULL," +
                 "    ISBN            INTEGER NOT NULL" +
-                "                            REFERENCES livros (ISBN)" +
+                "                            REFERENCES livros (ISBN), " +
+                "    nomeLivro       STRING NOT NULL" +
                 ");";
 
         boolean conectou = false;
@@ -127,11 +131,12 @@ public class CriarTabelas {
         }
 
     }
-    private void criarTabelaRevervas(){
+    private void criarTabelaReservas(){
         String sql = "CREATE TABLE IF NOT EXISTS  reservas (" +
                      "reverva_id INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL UNIQUE," +
                      "ISBN       INTEGER REFERENCES livros (ISBN)     NOT NULL," +
-                     "user_id    INTEGER REFERENCES usuarios (user_id) NOT NULL" +
+                     "user_id    INTEGER REFERENCES usuarios (user_id) NOT NULL, " +
+                     "reservaAtiva BOOLEAN NOT NULL" +
                      ");";
 
         boolean conectou = false;

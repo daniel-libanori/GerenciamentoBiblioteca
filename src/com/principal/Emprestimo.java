@@ -20,6 +20,7 @@ public class Emprestimo {
     private int mesDevolucao;
     private int anoDevolucao;
     private int ISBN;
+    private String nomeLivro;
 
     public Emprestimo(ConexaoSQLite conexaoSQLite){
 
@@ -55,6 +56,7 @@ public class Emprestimo {
 
 
         this.calculaDevolucao(this.diaEmprestimo,this.mesEmprestimo,this.anoEmprestimo, Auxilio.verificaSeUsuarioEhProfessor(conexaoSQLite,this.user_id));
+
 
 
     }
@@ -180,5 +182,13 @@ public class Emprestimo {
 
     public void setAnoDevolucao(int anoDevolucao) {
         this.anoDevolucao = anoDevolucao;
+    }
+
+    public String getNomeLivro() {
+        return nomeLivro;
+    }
+
+    public void setNomeLivro(String nomeLivro) {
+        this.nomeLivro = nomeLivro;
     }
 }
